@@ -100,7 +100,7 @@ public class Search extends Fragment {
         Spinner spin = view.findViewById(R.id.spinner2);
         //Spinner spin = (Spinner) view.findViewById(R.id.spinner2);
 
-        String[] items = new String[]{"--- CATEGORY ---","Sports", "Pets", "Cosmetics","Furniture","Clothing","Arts","---- PRICE ----","15000-16000","17000-20000","20000-30000"};
+        String[] items = new String[]{"--- CATEGORY ---","Sports", "Pets", "Cosmetics","Furniture","Clothing","Arts","---- PRICE ----","10000-15000","16000-20000","21000-30000"};
 //create an adapter to describe how the items are displayed, adapters are used in several places in android.
 //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,items);
@@ -187,17 +187,17 @@ public class Search extends Fragment {
 
 
                     case 8:
-                        searchCategoryprice("15000-16000");
+                        searchCategoryprice("10000-15000");
 
 
                         break;
                     case 9:
-                        searchCategoryprice("17000-20000");
+                        searchCategoryprice("16000-20000");
 
 
                         break;
                     case 10:
-                        searchCategoryprice("20000-30000");
+                        searchCategoryprice("21000-30000");
 
 
                         break;
