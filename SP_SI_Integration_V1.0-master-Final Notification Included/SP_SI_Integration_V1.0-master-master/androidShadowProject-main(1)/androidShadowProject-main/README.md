@@ -1,2 +1,0 @@
-# androidShadowProject
- mobile app
