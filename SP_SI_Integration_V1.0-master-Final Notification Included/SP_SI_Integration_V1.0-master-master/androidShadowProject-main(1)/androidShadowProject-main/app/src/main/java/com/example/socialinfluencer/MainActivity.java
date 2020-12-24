@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         MainActivityRunning=true;
-
-
     }
 
     @Override

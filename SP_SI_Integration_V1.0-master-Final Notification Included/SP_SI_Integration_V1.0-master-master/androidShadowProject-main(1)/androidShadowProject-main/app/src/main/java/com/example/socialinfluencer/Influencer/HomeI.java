@@ -56,8 +56,6 @@ public class HomeI extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .permitAll().build();
             StrictMode.setThreadPolicy(policy);
-            //your codes here
-
         }
         //replaceFragment(new HomeInfluencer());
         fAuth= FirebaseAuth.getInstance();
@@ -122,7 +120,7 @@ public class HomeI extends AppCompatActivity {
                     }
                 });
         if (savedInstanceState == null) {
-            bottomNavigationView.setSelectedItemId(R.id.navigation_home); // change to whichever id should be default
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home); // change to whichever default
         }
 
 //        findViewById(R.id.signOut).setOnClickListener(new View.OnClickListener() {

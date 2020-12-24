@@ -64,7 +64,6 @@ public class HomeInfluencer extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final RecyclerView campaignList=view.findViewById(R.id.recyclerView);
-
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager((getContext()));
         linearLayoutManager.setAutoMeasureEnabled(true);
         campaignList.setLayoutManager(linearLayoutManager);

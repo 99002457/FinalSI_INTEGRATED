@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.socialinfluencer.DataModels.InfluencerProfileData;
@@ -75,6 +76,7 @@ public class influencerdetails1 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = this.getArguments();
         String InfluencerID = bundle.getString("InfluencerID", "No-Influencer");
+//        Toast.makeText(getContext(), InfluencerID, Toast.LENGTH_SHORT).show();
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("Influencer").child(InfluencerID);
         final TextView Name=view.findViewById(R.id.textView21);
         final TextView Cat1=view.findViewById(R.id.textView);

@@ -20,9 +20,18 @@ public class Campaign_Data_Model {
     String Descripton;
     String End_Date;
     String Start_Date;
+    String Id;
     long Budget;
     String Advertiser_Name;
     String Advertiser_ID;
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
 
     public Campaign_Data_Model()
     {

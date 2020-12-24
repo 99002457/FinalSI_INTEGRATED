@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SearchView;
+import android.widget.Spinner;
 
 import com.example.socialinfluencer.DataModels.Campaign_Data_Model;
 import com.example.socialinfluencer.R;
@@ -41,6 +44,7 @@ public class Search extends Fragment {
     SearchCampaignsAdapter adapter;
     List<Campaign_Data_Model> listData;
     RecyclerView Campaigns;
+    String querySearch;
     private List<Campaign_Data_Model> lcampaignsistData;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -76,7 +80,7 @@ public class Search extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
+        querySearch="";
 
     }
 
@@ -92,6 +96,120 @@ public class Search extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Campaigns = view.findViewById(R.id.SearchResults);
         final SearchView search=view.findViewById(R.id.influencerSearch);
+        Spinner spin = view.findViewById(R.id.spinner2);
+        //Spinner spin = (Spinner) view.findViewById(R.id.spinner2);
+        querySearch=" ";
+        String[] items = new String[]{"--- CATEGORY ---","Sports", "Pets", "Cosmetics","Furniture","Clothing","Arts","---- PRICE ----","10000-15000","16000-20000","21000-30000"};
+//create an adapter to describe how the items are displayed, adapters are used in several places in android.
+//There are multiple variations of this, but this is the basic variant.
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,items);
+        //ArrayAdapter adapter = new ArrayAdapter(context,android.R.layout.simple_spinner_item,items);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(adapter1);
+
+        String text = spin.getSelectedItem().toString();
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchProcess(query);
+                querySearch=query;
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchProcess(newText);
+                querySearch=newText;
+                return false;
+            }
+        });
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+
+                    case 0:
+//                        searchCategory1(">>>Filter>>>");
+//                        Toast.makeText(getContext(),"display somthig 00000",
+//                                Toast.LENGTH_SHORT).show();
+                        break;
+
+
+                    case 1:
+                        searchCategory1("Sports");
+
+//                        Toast.makeText(getContext(),"display somthig 00000",
+//                                Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case 2:
+                        searchCategory1("Pets");
+//                        Toast.makeText(getContext(),"display somthig  1111",
+//                                Toast.LENGTH_SHORT).show();
+
+                        break;
+//                    case 2:
+//                        Toast.makeText(getContext(),"display somthig 22222",
+//                                Toast.LENGTH_SHORT).show();
+
+                    // break;
+                    case 3:
+                        searchCategory1("Cosmetics");
+//                        Toast.makeText(getContext(),"display somthig 00000",
+//                                Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case 4:
+                        searchCategory1("Furniture");
+//                        Toast.makeText(getContext(),"display somthig 00000",
+//                                Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case 5:
+                        searchCategory1("Clothing");
+//                        Toast.makeText(getContext(),"display somthig 00000",
+//                                Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case 6:
+                        searchCategory1("Arts");
+//                        Toast.makeText(getContext(),"display somthig 00000",
+//                                Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case 7:
+//                        searchCategory1(">>>Price>>>");
+//                        Toast.makeText(getContext(),"display somthig 00000",
+//                                Toast.LENGTH_SHORT).show();
+                        break;
+
+
+                    case 8:
+                        searchCategoryprice("10000-15000");
+
+
+                        break;
+                    case 9:
+                        searchCategoryprice("16000-20000");
+
+
+                        break;
+                    case 10:
+                        searchCategoryprice("21000-30000");
+
+
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -136,6 +254,84 @@ public class Search extends Fragment {
         super.onStop();
 
     }
+
+    public void searchCategoryprice(final String s)
+    {
+        CampID=new ArrayList<>();
+        listData=new ArrayList<>();
+        CampID=new ArrayList<>();
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("Campaigns");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot datas: dataSnapshot.getChildren()){
+                    Campaign_Data_Model scd=datas.getValue(Campaign_Data_Model.class);
+                    long price = scd.getBudget();
+                    String[] numberss=s.split("-");
+                    int lower=Integer.valueOf(numberss[0]);
+                    int upper=Integer.valueOf(numberss[1]);
+
+                    //List<String> Cat=scd.getBudget();
+                    if(scd.getCampaign_Name().toUpperCase().indexOf(querySearch.toUpperCase())!=-1) {
+                        if(scd.getBudget()>=lower && scd.getBudget()<=upper)
+                        {   listData.add(scd);CampID.add(datas.getKey());}
+
+                    }
+//                    Toast.makeText(getContext(),querySearch,
+//                            Toast.LENGTH_SHORT).show();
+//                    Log.d("/outputAdd",scd.getAdvertiserID());
+                    customAdapter adapter = new customAdapter(listData,  CampID,getContext());
+                    Campaigns.setAdapter(adapter);
+                    //get other items
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void searchCategory1(final String s)
+    {
+
+        CampID=new ArrayList<>();
+        listData=new ArrayList<>();
+        CampID=new ArrayList<>();
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("Campaigns");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot datas: dataSnapshot.getChildren()){
+
+                    CampID.add(datas.getKey());
+                    Campaign_Data_Model scd=datas.getValue(Campaign_Data_Model.class);
+                    List<String> Cat=scd.getCategories();
+                    if(scd.getCampaign_Name().toUpperCase().indexOf(querySearch.toUpperCase())!=-1&& Cat.get(0).toUpperCase().indexOf(s.toUpperCase())!=-1)
+                        listData.add(scd);
+//                    Toast.makeText(getContext(),querySearch,
+//                            Toast.LENGTH_SHORT).show();
+//                    Log.d("/outputAdd",scd.getAdvertiserID());
+                    customAdapter adapter = new customAdapter(listData,  CampID,getContext());
+                    Campaigns.setAdapter(adapter);
+                    //get other items
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+
     public void searchCategory(final String s)
     {
         CampID=new ArrayList<>();
@@ -150,7 +346,7 @@ public class Search extends Fragment {
                 for(DataSnapshot datas: dataSnapshot.getChildren()){
                     Campaign_Data_Model scd=datas.getValue(Campaign_Data_Model.class);
                   List<String> Cat=scd.getCategories();
-                    if(Cat.get(0).toUpperCase().indexOf(s.toUpperCase())!=-1)
+                    if(scd.getCampaign_Name().toUpperCase().indexOf(s.toUpperCase())!=-1)
                     {listData.add(scd);CampID.add(datas.getKey());}
 //                    Log.d("/outputAdd",scd.getAdvertiserID());
                     customAdapter adapter = new customAdapter(listData,CampID,getContext());

@@ -211,8 +211,7 @@ public class Login extends Fragment {
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         if(snapshot.child("Influencer").child(userID).exists())
                                         {
-                                            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference("Influencer");
-                                            mRef.child(userID).child("token").setValue(FirebaseMessaging.getInstance().getToken());
+
                                             if(getActivity()!=null) {
                                                 Intent intent = new Intent(thisContext, HomeI.class);
                                                 startActivity(intent);
@@ -221,8 +220,6 @@ public class Login extends Fragment {
                                         }
                                         else if(snapshot.child("Advertiser").child(userID).exists())
                                         {
-                                            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference("Advertiser");
-                                            mRef.child(userID).child("token").setValue(FirebaseMessaging.getInstance().getToken());
                                             if(getActivity()!=null) {
                                                 Intent intent = new Intent(thisContext, HomeA.class);
 
